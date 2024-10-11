@@ -17,6 +17,7 @@ This project involves building a full-fledged news aggregation service focused o
 
 ---
 
+```mermaid
 graph TD;
     A[User Lands on Homepage] --> B[Show Generic Stock Market News]
     B --> C[Prompt for Sign-In]
@@ -42,7 +43,7 @@ graph TD;
 
     E --> Q[Real-Time News Updates]
     Q --> R[Push Notifications for New Articles]
-
+```
 
 ## **Tech Stack Overview**
 - **Backend**:
