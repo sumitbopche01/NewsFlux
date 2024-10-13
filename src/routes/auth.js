@@ -10,4 +10,12 @@ router.post('/login', login);
 router.get('/google', googleAuth);
 router.get('/google/callback', googleCallback);
 
+// User profile route
+router.get('/profile', (req, res) => {
+    if (!req.user) {
+        return res.status(401).send('Not logged in');
+    }
+    res.send(`Hello, ${req.user.displayName}`);
+});
+
 module.exports = router;

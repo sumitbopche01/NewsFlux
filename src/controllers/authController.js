@@ -2,7 +2,9 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const passport = require('passport');
-const { OAuth2Strategy } = require('passport-google-oauth');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+require("dotenv").config();
 
 // Sign-up logic
 exports.signup = async (req, res) => {
@@ -33,7 +35,7 @@ exports.login = async (req, res) => {
 };
 
 // Google OAuth logic
-passport.use(new OAuth2Strategy({
+passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL,
