@@ -22,6 +22,7 @@ exports.signup = async (req, res) => {
 // Login logic
 exports.login = async (req, res) => {
     const { email, password } = req.body;
+    console.log(email, password);
     try {
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ error: 'User not found' });
@@ -41,13 +42,24 @@ passport.use(new GoogleStrategy({
     callbackURL: process.env.CALLBACK_URL,
 }, async (accessToken, refreshToken, profile, done) => {
     try {
+        console.log('Google profile:', profile); // Log the profile to see what data is returned
         let user = await User.findOne({ googleId: profile.id });
         if (!user) {
-            user = new User({ googleId: profile.id, email: profile.emails[0].value });
+            console.log('Creating new user...');
+            user = new User({
+                googleId: profile.id,
+                email: profile.emails[0].value,
+                username: profile.displayName || profile.emails[0].value.split('@')[0], // Use displayName or part of email as username
+                preferences: [] // Default preferences, can be updated later
+            });
             await user.save();
+            console.log('User saved:', user);
+        } else {
+            console.log('User already exists:', user);
         }
         done(null, user);
     } catch (error) {
+        console.error('Error in Google OAuth:', error);
         done(error, false);
     }
 }));
@@ -56,7 +68,7 @@ exports.googleAuth = passport.authenticate('google', { scope: ['profile', 'email
 
 exports.googleCallback = (req, res, next) => {
     passport.authenticate('google', { session: false }, (err, user) => {
-        if (err || !user) return res.redirect('/login');
+        if (err || !user) return res.redirect('/');
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
         res.redirect(`/auth/callback?token=${token}`);
     })(req, res, next);
