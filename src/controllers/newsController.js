@@ -1,8 +1,9 @@
-const { fetchNews } = require('../services/newsService');
+const { fetchNewsArticles, fetchTopHeadlines } = require('../services/newsService');
 
 exports.getGeneralNews = async (req, res) => {
     try {
-        const articles = await fetchNews('general');
+        // Fetch general news headlines
+        const articles = await fetchTopHeadlines({ category: 'general', country: 'us' });
         res.status(200).json(articles);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch general news' });
@@ -11,7 +12,8 @@ exports.getGeneralNews = async (req, res) => {
 
 exports.getStockNews = async (req, res) => {
     try {
-        const articles = await fetchNews('business');
+        // Fetch business news headlines
+        const articles = await fetchTopHeadlines({ category: 'business', country: 'us' });
         res.status(200).json(articles);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch stock news' });

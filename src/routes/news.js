@@ -4,6 +4,7 @@ const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 router.get('/general', getGeneralNews);
-router.get('/stocks', protect, getStockNews); // Protected route
+// router.get('/stocks', protect, getStockNews); // Protected route
+router.get('/stocks', getStockNews); // Protected route
 
 module.exports = router;
